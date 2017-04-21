@@ -6,13 +6,15 @@ import operator
 ## CS121 Assignment 1 Part 2
 ## Student Name: Joshua Pascascio
 ## Student ID: 52192782
-STRIP = "`~!.@#$%^&*?:()_-+=[]{}|\\/>,<\"\'"
+
+STRIP = ";`~!.@#$%^&*?:()_-+=[]{}|\\/>,<\"\'"
 
 class SharedText:
     def __init__(self,wordDict,wordCount,fileName1,fileName2):
         self.commonWords = wordDict
         self.commonCount = wordCount
         self.wordList = list(wordDict.keys())
+        self.sharedCount = len(self.wordList)
         self.fileName1 = fileName1
         self.fileName2 = fileName2
         print("Preparing to format shared words from " + self.fileName1 + " and " + self.fileName2)
@@ -32,14 +34,17 @@ class SharedText:
             if pair[0] != "":
                 print(pair[0] + " - " + str(pair[1]))
     def truncatedOutput(self):
-        display_Str = "The number of words in common between " + self.fileName1 + " and " + self.fileName2 + " is:  " + str(self.commonCount)
+        display_Str = "The number of words in common between " + self.fileName1 + " and " + self.fileName2 + " is:  " + str(self.sharedCount)
         print(display_Str)
-        prompt1 = input("Would you like to see all the words held in common?\n [Yes to display; Any other input to continue]\n")
+        prompt0 = input("Would you like to know the total number of times " + self.fileName1 + " and " + self.fileName2 + " had a word in common\n[Yes to display; Any other input to continue]\n")
+        if(prompt0.lower().strip() == "yes"):
+            print("Total amount of intersections is:  " + str(self.commonCount))
+        prompt1 = input("Would you like to see all the words held in common?\n[Yes to display; Any other input to continue]\n")
         if(prompt1.lower().strip() == "yes"):
             self.formattedWords(self.wordList)
         else:
             print("Skipping this portion of output")
-        prompt2 = input("Would you like to see the words held in common by frequency as well?\n [Yes to display; Any other input to continue]\n")
+        prompt2 = input("Would you like to see the words held in common by frequency as well?\n[Yes to display; Any other input to continue]\n")
         if(prompt2.lower().strip() == "yes"):
             self.formatPairs(self.commonWords)
         else:
@@ -141,14 +146,24 @@ def processedOutput(frequencies):
                 returnStr = returnStr + pair[0] + " - " + str(pair[1]) + "\n" ##Notation: word + " - " values + "\n"
         return returnStr
 
+def loadSysArguments():
+    try:
+        file1 = sys.argv[1]
+        file2 = sys.argv[2]
+        print("CS121 Assignment 1 Part 2")
+        f = FileComparator(file1,file2)    
+        sharedResult = f.mergeFormattedFiles()
+        if sharedResult.getFileName1 != "ERROR" and sharedResult.getFileName2 != "ERROR":
+            sharedResult.truncatedOutput()
+    except IndexError:
+        print("I am sorry there may be missing or too many files loaded in your command-line system call!\nPlease try again with just two files")
+    except KeyboardInterrupt:
+        print("There was an I/O Interrupt error.\nTry letting the file fully process before typing or hitting Ctrl-Z or Ctrl-C")
+    except:
+        print("An error has occurred.\nPlease try reloading the program")
+    finally:
+        print("Long text files were retrieved through textfiles.com\nThe files used in this module and \
+many others can be retrieved from https://textfiles.com/adventure\n")
 
 if __name__=="__main__":
-    file1 = sys.argv[1]
-    file2 = sys.argv[2]
-    print("CS121 Assignment 1 Part 2")
-    f = FileComparator(file1,file2)    
-    sharedResult = f.mergeFormattedFiles()
-    if sharedResult.getFileName1 == "ERROR" or sharedResult.getFileName2 == "ERROR":
-        print("Unable to retrieve successful analysis")
-    else:
-        sharedResult.truncatedOutput()
+    loadSysArguments()
