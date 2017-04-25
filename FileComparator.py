@@ -92,11 +92,15 @@ class FileComparator:
                         baseFile1.close()
                 else:
                     self.parseLine(re.split("\s",file1Lines[i]),self.frequency1)
+                    ## To split for non-alphanumeric chars use
+                    ## self.parseLine(re.split("\W",file1Lines[i],self.frequency1)
                 if i >= file2Length:
                     if baseFile2.closed == False:
                         baseFile2.close()
                 else:
                     self.parseLine(re.split("\s",file2Lines[i]),self.frequency2)
+                    ## To split for non-alphanumeric chars use
+                    ## self.parseLine(re.split("\W",file2Lines[i],self.frequency2)
             self.resetFiles(baseFile1,baseFile2)
         except FileNotFoundError: ##Handle OS and FileErrors
             print("There has been a File I/O error\n.The file or pathname you have selected likely does not exist.\nPlease try another filename")
@@ -109,11 +113,13 @@ class FileComparator:
             baseFile1.close()
             baseFile2.close()
     def parseLine(self,lineArr,dictToPut):
-        for word in lineArr:
-            if word.lower().strip(STRIP) not in dictToPut:
-                dictToPut[word.lower().strip(STRIP)] = 1
-            else:
-                dictToPut[word.lower().strip(STRIP)] += 1
+        ## To ensure that the empty string ("") is not added to the building dictionary of word frequencies !
+        if word.lower().strip(STRIP) != "":
+            for word in lineArr:
+                if word.lower().strip(STRIP) not in dictToPut:
+                    dictToPut[word.lower().strip(STRIP)] = 1
+                else:
+                    dictToPut[word.lower().strip(STRIP)] += 1
     def mergeFormattedFiles(self):
         if len(self.frequency1) == 0 or len(self.frequency2) == 0:
             print("Files are either empty or not initialized properly please try again!")
