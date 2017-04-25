@@ -23,6 +23,9 @@ class TextProcessor:
             fileLines = baseFile.readlines()
             for line in fileLines:
                 modifiedLine = re.split("\s",line)
+                ##if you want to split ALL non-alphanumeric characters and have only standard English/Western word use this statement below
+                ## modifiedLine = re.split("\W",line) 
+                #### '\W' filters out all non-alphanumeric characters
                 self.parseText(modifiedLine)
             #self.filePassage = baseFile.read() ##Read file and extract text data to string
             #self.words = re.split("\s",self.filePassage) ##Split into iterable list
